@@ -1,4 +1,4 @@
-name: Build NSIS Installer
+name: Build the installer
 
 on:
   push
@@ -9,7 +9,8 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+
     - name: Download Apache Maven
       run: |
         $url = "https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.zip"
@@ -19,8 +20,22 @@ jobs:
     - name: Extract ZIP file
       run: |
         $zipPath = "apache-maven-3.9.8-bin.zip"
-        $extractPath = "extracted_files"
+        $extractPath = "apache-maven"
         Expand-Archive -Path $zipPath -DestinationPath $extractPath
 
     - name: List extracted files
-      run: Get-ChildItem -Path extracted_files
+      run: Get-ChildItem -Path apache-maven/apache-maven-3.9.8
+
+    - name: Install Inno Setup
+      run: |
+        choco install innosetup
+
+    - name: Create installer
+      run: |
+        iscc /Qp setup.iss
+
+    - name: Upload installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: setup
+        path: Output/setup.exe
