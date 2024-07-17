@@ -7,6 +7,7 @@ OutputBaseFilename=setup
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=admin
+ChangesEnvironment=yes
 AppPublisher=The Apache Software Foundation
 AppPublisherURL=https://maven.apache.org
 
