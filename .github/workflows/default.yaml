@@ -1,0 +1,26 @@
+name: Build NSIS Installer
+
+on:
+  push
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Download Apache Maven
+      run: |
+        $url = "https://dlcdn.apache.org/maven/maven-3/3.9.8/binaries/apache-maven-3.9.8-bin.zip"
+        $output = "apache-maven-3.9.8-bin.zip"
+        Invoke-WebRequest -Uri $url -OutFile $output
+
+    - name: Extract ZIP file
+      run: |
+        $zipPath = "apache-maven-3.9.8-bin.zip"
+        $extractPath = "extracted_files"
+        Expand-Archive -Path $zipPath -DestinationPath $extractPath
+
+    - name: List extracted files
+      run: Get-ChildItem -Path extracted_files
